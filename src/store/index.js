@@ -1,8 +1,14 @@
-import { createStore } from "vuex";
+import { createStore } from 'vuex'
 
 export default createStore({
-  state: {},
-  mutations: {},
+  state: {
+    homeInput: ''
+  },
+  mutations: {
+    setHomeInput(state, data) {
+      state.homeInput = data
+    }
+  },
   actions: {},
   modules: {}
-});
+})

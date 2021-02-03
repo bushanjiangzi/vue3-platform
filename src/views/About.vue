@@ -1,6 +1,7 @@
 <template>
   <div class="about">
     <!-- 表单 -->
+    <h3>表单</h3>
     <el-form :model="ruleForm" :rules="rules" ref="formRef" label-width="100px" class="demo-ruleForm">
       <el-form-item label="活动名称" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
@@ -55,6 +56,7 @@
       </el-form-item>
     </el-form>
     <!-- 表格 -->
+    <h3>表格</h3>
     <el-table
       :data="tableData.filter((data) => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
       style="width: 100%"
@@ -72,6 +74,7 @@
       </el-table-column>
     </el-table>
     <!-- 轮播图 -->
+    <h3>轮播图</h3>
     <div class="block">
       <span class="demonstration">默认 Hover 指示器触发</span>
       <el-carousel height="150px">
@@ -81,12 +84,14 @@
       </el-carousel>
     </div>
     <!-- 步骤条 -->
+    <h3>步骤条</h3>
     <el-steps :active="1">
       <el-step title="步骤 1" description="这是一段很长很长很长的描述性文字"></el-step>
       <el-step title="步骤 2" description="这是一段很长很长很长的描述性文字"></el-step>
       <el-step title="步骤 3" description="这段就没那么长了"></el-step>
     </el-steps>
     <!-- Dialog -->
+    <h3>Dialog</h3>
     <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
     <el-dialog title="提示" v-model="dialogVisible" width="30%" :before-close="handleClose">
       <span>这是一段信息</span>
@@ -98,6 +103,7 @@
       </template>
     </el-dialog>
     <!-- 树组件 -->
+    <h3>树组件</h3>
     <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
     <el-tree
       class="filter-tree"
@@ -107,12 +113,55 @@
       :filter-node-method="filterNode"
       ref="treeRef"
     ></el-tree>
+    <!-- 消息 -->
+    <h3>消息</h3>
+    <el-button :plain="true" @click="openMessage">成功</el-button>
+    <!-- tab栏 -->
+    <h3>tab栏</h3>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
+      <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+    </el-tabs>
+    <!-- 下拉框 -->
+    <h3>下拉框</h3>
+    <el-select v-model="sletctValue" clearable placeholder="请选择">
+      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+    </el-select>
+    <!-- 文件上传 -->
+    <h3>文件上传</h3>
+    <el-upload
+      class="upload-demo"
+      ref="uploadTree"
+      action="https://jsonplaceholder.typicode.com/posts/"
+      :on-preview="handlePreview"
+      :on-remove="handleRemove"
+      :file-list="fileList"
+      :auto-upload="false"
+    >
+      <template #trigger>
+        <el-button size="small" type="primary">选取文件</el-button>
+      </template>
+      <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+      <template #tip>
+        <div class="el-upload__tip">
+          只能上传 jpg/png 文件，且不超过 500kb
+        </div>
+      </template>
+    </el-upload>
+    <!-- 穿梭器 -->
+    <el-transfer
+      v-model="transferValue"
+      filterable
+      :filter-method="filterMethod"
+      filter-placeholder="请输入城市拼音"
+      :data="transferData"
+    />
   </div>
 </template>
 
 <script>
 import { reactive, ref, watch, watchEffect } from 'vue'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, ElMessage } from 'element-plus'
 export default {
   name: 'About',
   setup() {
@@ -219,6 +268,38 @@ export default {
       children: 'children',
       label: 'label'
     })
+    let activeName = ref('second')
+    const options = reactive([
+      {
+        value: '选项1',
+        label: '黄金糕'
+      },
+      {
+        value: '选项2',
+        label: '双皮奶'
+      },
+      {
+        value: '选项3',
+        label: '蚵仔煎'
+      }
+    ])
+    let sletctValue = ref()
+    let uploadTree = ref()
+    const fileList = reactive([
+      {
+        name: 'food.jpeg',
+        url:
+          'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+      },
+      {
+        name: 'food2.jpeg',
+        url:
+          'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+      }
+    ])
+    let transferData = reactive()
+    let transferValue = reactive([])
+
     const submitForm = function() {
       formRef.value.validate((valid) => {
         if (valid) {
@@ -240,7 +321,7 @@ export default {
       console.log(index, row, row.date)
     }
     const handleClose = function(done) {
-      ElMessageBox('确认关闭？')
+      ElMessageBox.confirm('确认关闭？')
         .then(() => {
           done()
         })
@@ -252,11 +333,49 @@ export default {
     }
     watchEffect(() => {
       // treeRef.value.filter(filterText)
+      console.log(transferValue)
     })
-    watch([filterText], ([oldVal]) => {
-      treeRef.value.filter(filterText.value)
-      console.log(filterText, oldVal)
+    watch([filterText], ([newFilter]) => {
+      treeRef.value.filter(newFilter)
+      console.log(filterText, newFilter)
     })
+    const openMessage = function() {
+      // ElMessage({
+      //   showClose: true,
+      //   message: '恭喜你，这是一条成功消息',
+      //   type: 'success'
+      // })
+      ElMessage.success('恭喜你，这是一条成功消息')
+    }
+    const handleClick = function(tab, event) {
+      console.log(tab, event)
+    }
+    const submitUpload = function() {
+      uploadTree.value.submit()
+    }
+    const handleRemove = function(file, fileList) {
+      console.log(file, fileList)
+    }
+    const handlePreview = function(file) {
+      console.log(file)
+    }
+    const generateData = () => {
+      const data = []
+      const cities = ['上海', '北京', '广州', '深圳', '南京', '西安', '成都']
+      const spell = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'nanjing', 'xian', 'chengdu']
+      cities.forEach((city, index) => {
+        data.push({
+          label: city,
+          key: index,
+          spell: spell[index]
+        })
+      })
+      return data
+    }
+    transferData = generateData()
+    const filterMethod = (query, item) => {
+      return item.spell.indexOf(query) > -1
+    }
     return {
       formRef,
       ruleForm,
@@ -273,7 +392,20 @@ export default {
       treeData,
       defaultProps,
       filterNode,
-      treeRef
+      treeRef,
+      openMessage,
+      activeName,
+      handleClick,
+      options,
+      sletctValue,
+      fileList,
+      uploadTree,
+      submitUpload,
+      handleRemove,
+      handlePreview,
+      transferData,
+      transferValue,
+      filterMethod
     }
   }
 }

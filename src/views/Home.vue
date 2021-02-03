@@ -10,11 +10,17 @@
     <input v-model="state.first" />
     <input v-model="state.second" />
     <div>{{ state.total2 }}</div>
+    <!-- <el-transfer
+      v-model="value"
+      filterable
+      :filter-method="filterMethod"
+      filter-placeholder="请输入城市拼音"
+      :data="data"
+    /> -->
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import { reactive, ref, watchEffect, watch } from 'vue'
 import store from '@/store/index'
@@ -24,6 +30,28 @@ export default {
   components: {
     HelloWorld
   },
+  // data() {
+  //   const generateData = () => {
+  //     const data = []
+  //     const cities = ['上海', '北京', '广州', '深圳', '南京', '西安', '成都']
+  //     const spell = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'nanjing', 'xian', 'chengdu']
+  //     cities.forEach((city, index) => {
+  //       data.push({
+  //         label: city,
+  //         key: index,
+  //         spell: spell[index]
+  //       })
+  //     })
+  //     return data
+  //   }
+  //   return {
+  //     data: generateData(),
+  //     value: [],
+  //     filterMethod(query, item) {
+  //       return item.spell.indexOf(query) > -1
+  //     }
+  //   }
+  // },
   // data() {
   //   return {
   //     myInput: ''

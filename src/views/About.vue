@@ -2,7 +2,13 @@
   <div class="about">
     <!-- 表单 -->
     <h3>表单</h3>
-    <el-form :model="ruleForm" :rules="rules" ref="formRef" label-width="100px" class="demo-ruleForm">
+    <el-form
+      :model="ruleForm"
+      :rules="rules"
+      ref="formRef"
+      label-width="100px"
+      class="demo-ruleForm"
+    >
       <el-form-item label="活动名称" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
@@ -143,9 +149,7 @@
       </template>
       <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
       <template #tip>
-        <div class="el-upload__tip">
-          只能上传 jpg/png 文件，且不超过 500kb
-        </div>
+        <div class="el-upload__tip">只能上传 jpg/png 文件，且不超过 500kb</div>
       </template>
     </el-upload>
     <!-- 穿梭器 -->
@@ -160,11 +164,12 @@
 </template>
 
 <script>
-import { reactive, ref, watch, watchEffect } from 'vue'
+import { reactive, ref, watch, watchEffect, getCurrentInstance } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 export default {
   name: 'About',
   setup() {
+    const { ctx } = getCurrentInstance()
     const formRef = ref()
     const ruleForm = reactive({
       name: '',
@@ -321,7 +326,14 @@ export default {
       console.log(index, row, row.date)
     }
     const handleClose = function(done) {
-      ElMessageBox.confirm('确认关闭？')
+      // ElMessageBox.confirm('确认关闭？')
+      //   .confirm('确认关闭？')
+      //   .then(() => {
+      //     done()
+      //   })
+      //   .catch(() => {})
+      ctx
+        .$confirm('确认关闭？')
         .then(() => {
           done()
         })
@@ -345,13 +357,16 @@ export default {
       //   message: '恭喜你，这是一条成功消息',
       //   type: 'success'
       // })
-      ElMessage.success('恭喜你，这是一条成功消息')
+      // ElMessage.success('恭喜你，这是一条成功消息')
+      ctx.$message.success('恭喜你，这是一条成功消息')
     }
     const handleClick = function(tab, event) {
       console.log(tab, event)
     }
     const submitUpload = function() {
-      uploadTree.value.submit()
+      // uploadTree.value.submit()
+      console.log(ctx.$refs.uploadTree)
+      ctx.$refs.uploadTree.submit()
     }
     const handleRemove = function(file, fileList) {
       console.log(file, fileList)

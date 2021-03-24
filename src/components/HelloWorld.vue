@@ -22,6 +22,7 @@ export default {
   //   }
   // },
   setup() {
+    // console.log(propsMsg)
     const msg = 'Hello Jiangzi'
     const homeInput = computed(() => {
       return store.state.homeInput

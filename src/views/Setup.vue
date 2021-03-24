@@ -5,7 +5,13 @@
     <h2>h2h2h2</h2>
     <!-- 表单 -->
     <h3>表单</h3>
-    <el-form :model="ruleForm" :rules="rules" ref="formRef" label-width="100px" class="demo-ruleForm">
+    <el-form
+      :model="ruleForm"
+      :rules="rules"
+      ref="formRef"
+      label-width="100px"
+      class="demo-ruleForm"
+    >
       <el-form-item label="活动名称" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
@@ -58,11 +64,14 @@
         <el-button @click="resetForm('form')">重置</el-button>
       </el-form-item>
     </el-form>
+    <!-- 消息 -->
+    <h3>消息</h3>
+    <el-button :plain="true" @click="openMessage">成功</el-button>
   </div>
 </template>
 
 <script>
-import testCommonApi from '@/lib/testCommonApi'
+import setupTest from '@/composition/setup'
 import HelloWorld from '@/components/HelloWorld.vue'
 export default {
   name: 'Setup',
@@ -70,12 +79,13 @@ export default {
     HelloWorld
   },
   setup() {
-    const { ruleForm, rules, propsMsg, myInput } = testCommonApi()
+    const { ruleForm, rules, propsMsg, myInput, openMessage } = setupTest()
     return {
       ruleForm,
       rules,
       propsMsg,
-      myInput
+      myInput,
+      openMessage
     }
   }
 }

@@ -164,12 +164,11 @@
 </template>
 
 <script>
-import { reactive, ref, watch, watchEffect, getCurrentInstance } from 'vue'
+import { reactive, ref, watch, watchEffect } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 export default {
   name: 'About',
   setup() {
-    const { ctx } = getCurrentInstance()
     const formRef = ref()
     const ruleForm = reactive({
       name: '',
@@ -326,14 +325,10 @@ export default {
       console.log(index, row, row.date)
     }
     const handleClose = function(done) {
-      // ElMessageBox.confirm('确认关闭？')
-      //   .confirm('确认关闭？')
-      //   .then(() => {
-      //     done()
-      //   })
-      //   .catch(() => {})
-      ctx
-        .$confirm('确认关闭？')
+      ElMessageBox.confirm('确认关闭？', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
         .then(() => {
           done()
         })
@@ -364,9 +359,7 @@ export default {
       console.log(tab, event)
     }
     const submitUpload = function() {
-      // uploadTree.value.submit()
-      console.log(ctx.$refs.uploadTree)
-      ctx.$refs.uploadTree.submit()
+      uploadTree.value.submit()
     }
     const handleRemove = function(file, fileList) {
       console.log(file, fileList)

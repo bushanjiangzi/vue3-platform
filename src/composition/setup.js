@@ -1,8 +1,9 @@
-import { reactive, ref, watch, watchEffect } from 'vue'
-import { ElMessageBox, ElMessage } from 'element-plus'
+import { reactive, ref, watch, watchEffect, getCurrentInstance } from 'vue'
+// import { ElMessageBox, ElMessage } from 'element-plus'
 import store from '@/store/index'
 
-const testCommonApi = function() {
+const setupTest = function () {
+  const { ctx } = getCurrentInstance()
   const propsMsg = reactive({
     msg: 'Hello',
     name: 'Jiangzi',
@@ -144,7 +145,7 @@ const testCommonApi = function() {
   let transferData = reactive()
   let transferValue = reactive([])
 
-  const submitForm = function() {
+  const submitForm = function () {
     formRef.value.validate((valid) => {
       if (valid) {
         alert('submit!')
@@ -154,24 +155,28 @@ const testCommonApi = function() {
       }
     })
   }
-  const resetForm = function() {
+  const resetForm = function () {
     formRef.value.resetFields()
   }
 
-  const handleEdit = function(index, row) {
+  const handleEdit = function (index, row) {
     console.log(index, row)
   }
-  const handleDelete = function(index, row) {
+  const handleDelete = function (index, row) {
     console.log(index, row, row.date)
   }
-  const handleClose = function(done) {
-    ElMessageBox.confirm('确认关闭？')
+  const handleClose = function (done) {
+    ctx
+      .$confirm('确认关闭？', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
       .then(() => {
         done()
       })
-      .catch(() => {})
+      .catch(() => { })
   }
-  const filterNode = function(value, data) {
+  const filterNode = function (value, data) {
     if (!value) return true
     return data.label.indexOf(value) !== -1
   }
@@ -184,24 +189,25 @@ const testCommonApi = function() {
     treeRef.value.filter(newFilter)
     console.log(filterText, newFilter)
   })
-  const openMessage = function() {
-    // ElMessage({
-    //   showClose: true,
-    //   message: '恭喜你，这是一条成功消息',
-    //   type: 'success'
-    // })
-    ElMessage.success('恭喜你，这是一条成功消息')
+  const openMessage = function () {
+    ctx.$message({
+      showClose: true,
+      message: '恭喜你，这是一条成功消息',
+      type: 'success'
+    })
+    // ctx.$message.success('恭喜你，这是一条成功消息')
   }
-  const handleClick = function(tab, event) {
+  const handleClick = function (tab, event) {
     console.log(tab, event)
   }
-  const submitUpload = function() {
-    uploadTree.value.submit()
+  const submitUpload = function () {
+    console.log(ctx.$refs.uploadTree)
+    ctx.$refs.uploadTree.submit()
   }
-  const handleRemove = function(file, fileList) {
+  const handleRemove = function (file, fileList) {
     console.log(file, fileList)
   }
-  const handlePreview = function(file) {
+  const handlePreview = function (file) {
     console.log(file)
   }
   const generateData = () => {
@@ -256,4 +262,4 @@ const testCommonApi = function() {
   }
 }
 
-export default testCommonApi
+export default setupTest

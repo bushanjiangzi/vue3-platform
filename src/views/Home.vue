@@ -17,6 +17,7 @@
       filter-placeholder="请输入城市拼音"
       :data="data"
     />
+    <el-button type="primary" plain @click="toSetup">Setup</el-button>
   </div>
 </template>
 
@@ -24,7 +25,8 @@
 import HelloWorld from '@/components/HelloWorld.vue'
 import { reactive, ref, watchEffect, watch } from 'vue'
 import store from '@/store/index'
-import testCommonApi from '@/lib/testCommonApi'
+import router from '@/router/index'
+import setupTest from '@/composition/setup'
 
 export default {
   name: 'Home',
@@ -65,7 +67,7 @@ export default {
   //   }
   // }
   setup() {
-    const { propsMsg, myInput } = testCommonApi()
+    const { propsMsg, myInput } = setupTest()
     // const propsMsg = reactive({
     //   msg: 'Hello',
     //   name: 'Jiangzi',
@@ -93,12 +95,16 @@ export default {
     watch([firstInput, secondInput], ([newFirst], [newSecond]) => {
       console.log(newFirst, newSecond)
     })
+    const toSetup = () => {
+      router.push({ name: 'Setup' })
+    }
     return {
       propsMsg,
       myInput,
       firstInput,
       secondInput,
-      state
+      state,
+      toSetup
     }
   }
 }
